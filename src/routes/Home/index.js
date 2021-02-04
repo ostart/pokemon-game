@@ -10,13 +10,12 @@ import s from './style.module.css';
 
 const HomePage = ({onChangePage}) => {
   const onClickButtonHandler = (page) => {
-    console.log('####: <HomePage />');
     onChangePage && onChangePage(page);
   };
   return (
     <>
       <MenuHeader />
-      <Header title="Homework #4" descr="This is my Homework #4" onClickButton={onClickButtonHandler} />
+      <Header title="Homework #5" descr="This is my Homework #5" onClickButton={onClickButtonHandler} />
       <Layout id="rules" title="Rules" urlBg={bg1}>
         <p>In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid.</p>
         <p>Each player has five cards in a hand and the aim is to capture the opponent's cards by turning them into the player's own color of red or blue.</p>
