@@ -1,7 +1,10 @@
-const GamePage = ({onChangePage}) => {
+import { useHistory } from 'react-router-dom';
+
+const GamePage = () => {
+    const history = useHistory();
+
     const onClickHandler = () => {
-        console.log('####: <GamePage />');
-        onChangePage && onChangePage('home');
+        history.push('/');
     };
 
     return (

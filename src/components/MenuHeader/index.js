@@ -6,7 +6,7 @@ const MenuHeader = ({bgActive}) => {
     const [isActive, setActive] = useState(null);
     return (
         <>
-            <Menu isActive={isActive} />
+            <Menu isActive={isActive} setActive={setActive} />
             <NavBar isActive={isActive} bgActive={bgActive} setActive={setActive} />
         </>
     );

@@ -1,31 +1,36 @@
 import cn from 'classnames';
+import { Link } from "react-router-dom";
+
 import s from './style.module.css';
 
 const MENU = [
     {
         title: 'HOME',
-        to: '#welcome',
+        to: '/',
     },
     {
         title: 'GAME',
-        to: '#game',
+        to: '/game',
     },
     {
         title: 'ABOUT',
-        to: '#about',
+        to: '/about',
     },
     {
         title: 'CONTACT',
-        to: '#contact',
+        to: '/contact',
     },
 ];
 
 
-const Menu = ({isActive}) => {
-    const localStyle = { 
+const Menu = ({isActive, setActive}) => {
+    let localStyle = { 
         [s.active]: isActive === true, 
         [s.deactive]: isActive === false,
     };
+
+    const onClickHandler = () => setActive(!isActive);
+
     return (
         <div className={cn(s.menuContainer, localStyle)}>
             <div className={s.overlay} />
@@ -34,9 +39,9 @@ const Menu = ({isActive}) => {
                     {
                         MENU.map(({title, to}, index) => (
                             <li key={index}>
-                                <a href={to}>
+                                <Link to={to} onClick={onClickHandler}>
                                     {title}
-                                </a>
+                                </Link>
                             </li>
                         ))
                     }
