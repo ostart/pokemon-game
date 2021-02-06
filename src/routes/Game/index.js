@@ -62,7 +62,7 @@ const GamePage = () => {
               "top" : 8
             }
         };
-        const newPostKey = `-MSjWsZps4Nua-${Math.random().toString(36).substring(7)}`;
+        const newPostKey = database.ref().child('pokemons').push().key;
         database.ref('pokemons/' + newPostKey).set(newPikachu);
         setPokemons(prevState => ({ ...prevState, [newPostKey]: newPikachu}));
     }
