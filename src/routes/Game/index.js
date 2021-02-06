@@ -16,13 +16,7 @@ const GamePage = () => {
     const [pokemons, setPokemons] = useState(POKEMONS);
 
     const onCardClickHandler = (id) => {
-        const index = pokemons.findIndex(pokemon => pokemon.id === id);
-        const selected = pokemons[index];
-        selected.isActive = !selected.isActive;
-        setPokemons(prevState => {
-            prevState[index] = selected;
-            return [...prevState];
-        });
+        setPokemons(prevState => prevState.map(item => item.id === id ? { ...item, isActive: !item.isActive } : item));
     };
 
     return (
