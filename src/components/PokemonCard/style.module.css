@@ -1,23 +1,27 @@
-.root {
-    width: 268px;
-    height: 388px;
-    margin: 16px;
-    perspective: 1000px;
-}
-
 .pokemonCard {
-    width: inherit;
-    height: inherit;
+    --fire: #FDDFDF;
+    --grass: #DEFDE0;
+    --electric: #FCF7DE;
+    --water: #DEF3FD;
+    --ground: #f4e7da;
+    --rock: #d5d5d4;
+    --fairy: #fceaff;
+    --poison: #98d7a5;
+    --bug: #f8d5a3;
+    --dragon: #97b3e6;
+    --psychic: #eaeda1;
+    --flying: #F5F5F5;
+    --fighting: #E6E0D4;
+    --normal:#F5F5F;
+
+    width: 100%;
+    height: 100%;
     position: relative;
     transform-style: preserve-3d;
     transition: .6s .1s;
     transform: rotateY(180deg);
 }
 
-/* TODO: This place where we should change :hover on .active */
-/* .pokemonCard.active {
-    transform: rotateY(0deg);
-} */
 .pokemonCard.active {
     animation: flipFront 1000ms 300ms forwards;
 }
@@ -31,12 +35,16 @@
     }
 }
 
+.pokemonCard.selected {
+    margin-top: -40px;
+}
+
 .cardFront,
 .cardBack {
     width: 100%;
     height: 100%;
     border-radius: 24px;
-    background: #F5F5F5;
+    background: var(--normal);
     position: absolute;
     top: 0;
     left: 0;
@@ -80,6 +88,10 @@
 
 .wrap.back {
     z-index: -1;
+    background-image: url(./assets/card-back-side.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .cardBack {
@@ -106,46 +118,46 @@
 }
 
 .fire {
-    background-color: #FDDFDF;
+    background-color: var(--fire);
 }
 .grass {
-    background-color: #DEFDE0;;
+    background-color: var(--grass);
 }
 .electric {
-    background-color: #FCF7DE;;
+    background-color: var(--electric);
 }
 .water {
-    background-color: #DEF3FD;;
+    background-color: var(--water);
 }
 .ground {
-    background-color: #f4e7da;;
+    background-color: var(--ground);
 }
 .rock {
-    background-color: #d5d5d4;;
+    background-color: var(--rock);
 }
 .fairy {
-    background-color: #fceaff;;
+    background-color: var(--fairy);
 }
 .poison {
-    background-color: #98d7a5;;
+    background-color: var(--poison);
 }
 .bug {
-    background-color: #f8d5a3;;
+    background-color: var(--bug);
 }
 .dragon {
-    background-color: #97b3e6;;
+    background-color: var(--dragon);
 }
 .psychic {
-    background-color:  #eaeda1;
+    background-color: var(--psychic);
 }
 .flying {
-    background-color: #F5F5F5;
+    background-color: var(--flying);
 }
 .fighting {
-    background-color: #E6E0D4;
+    background-color: var(--fighting);
 }
 .normal {
-    background-color: #F5F5F5;
+    background-color: var(--normal);
 }
 
 .pokemon .imgContainer {
