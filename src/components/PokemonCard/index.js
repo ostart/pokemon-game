@@ -1,11 +1,11 @@
 import cn from 'classnames';
-import cardBackSide from './assets/card-back-side.jpg';
+// import cardBackSide from './assets/card-back-side.jpg';
 
 import s from './style.module.css';
 
 const PokemonCard = ({id, name, type, values, img, onCardClick, minimize, className, isActive = false}) => {
     return (
-        <div className={cn(className, s.pokemonCard, {[s.active]: isActive})}>
+        <div className={cn(className, s.pokemonCard, s.card, {[s.active]: isActive})}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
                     <div className={cn(s.pokemon, s[type])}>

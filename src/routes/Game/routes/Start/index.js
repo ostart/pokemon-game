@@ -3,8 +3,10 @@ import { useState, useEffect, useContext } from 'react';
 import Layout from '../../../../components/Layout';
 import PokemonCard from '../../../../components/PokemonCard';
 
-import s from './style.module.css';
 import { FirebaseContext } from '../../../../context/firebaseContext';
+
+import s from './style.module.css';
+
 
 const GamePage = () => {
     const history = useHistory();
@@ -21,7 +23,7 @@ const GamePage = () => {
         firebase.getPokemonSocket((pokemons) => {
             setPokemons(pokemons);
         })
-    }, []);
+    }, [firebase]);
 
     const onCardClickHandler = (id) => {
         setPokemons(prevState => {
@@ -87,7 +89,8 @@ const GamePage = () => {
                         values={v.values} 
                         img={v.img} 
                         onCardClick={onCardClickHandler}
-                        isActive={v.isActive}
+                        isActive={true}
+                        isSelected={v.isSelected}
                         />)
                 }
                 </div>
