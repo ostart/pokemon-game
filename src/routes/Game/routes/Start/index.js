@@ -1,102 +1,74 @@
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
-import Layout from '../../../../components/Layout';
 import PokemonCard from '../../../../components/PokemonCard';
 
 import { FirebaseContext } from '../../../../context/firebaseContext';
+import { PokemonContext } from '../../../../context/pokemonContext';
 
 import s from './style.module.css';
 
-
-const GamePage = () => {
+const StartPage = () => {
     const history = useHistory();
-
-    const onClickHandler = () => {
-        history.push('/');
-    };
-
     const firebase = useContext(FirebaseContext);
+    const pokemonsContext = useContext(PokemonContext);
 
     const [pokemons, setPokemons] = useState({});
 
     useEffect(() => {
         firebase.getPokemonSocket((pokemons) => {
             setPokemons(pokemons);
-        })
-    }, [firebase]);
-
-    const onCardClickHandler = (id) => {
-        setPokemons(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                if (pokemon.id === id) {
-                    pokemon.isActive = !pokemon.isActive;
-                    firebase.postPokemon(item[0], pokemon);
-                };
-        
-                acc[item[0]] = pokemon;
-        
-                return acc;
-            }, {});
         });
+        return () => firebase.offPokemonSocket();
+    }, []);
+
+    const onCardSelectedHandler = (key) => {
+        const pokemon = {...pokemons[key]};
+        pokemonsContext.onSelectPokemons(key, pokemon);
+
+        setPokemons(prevState => ({
+            ...prevState,
+            [key]: {
+                ...prevState[key],
+                isSelected: !prevState[key].isSelected,
+            }
+        }))
     };
 
-    const addNewPokemonHandler = () => {
-        const newId = Math.floor(Math.random() * 100);
-        const newPikachu = {
-            "abilities" : [ "static", "lightning-rod" ],
-            "base_experience" : 112,
-            "height" : 4,
-            "id" : newId,
-            "img" : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-            "name" : "pikachu",
-            "stats" : {
-              "attack" : 55,
-              "defense" : 40,
-              "hp" : 35,
-              "special-attack" : 50,
-              "special-defense" : 50,
-              "speed" : 90
-            },
-            "type" : "electric",
-            "values" : {
-              "bottom" : 9,
-              "left" : 6,
-              "right" : "A",
-              "top" : 8
-            }
-        };
-        firebase.addPokemon(newPikachu);
-    }
+    const onClickStartGameHandler = () => {
+        history.push('/game/board');
+    };
 
     return (
         <>
-            <div>
-                This is Game Page!!!
+            <div className={s.buttonWrap}>
+                <button onClick={onClickStartGameHandler} disabled={Object.keys(pokemonsContext.selectedPokemons).length < 5}>
+                    Start Game
+                </button>
             </div>
-            <button onClick={onClickHandler}>
-                Return Home
-            </button>
-            <Layout id="cards" title="Cards" colorBg="#202736" colorTitle="#FEFEFE">
-                <div className={s.flex}><button onClick={addNewPokemonHandler}>ADD NEW POKEMON</button></div>
-                <div className={s.flex}>
+            <div className={s.flex}>
                 {
-                    Object.entries(pokemons).map(([k, v]) => <PokemonCard 
-                        key={k} 
-                        id={v.id} 
-                        name={v.name} 
-                        type={v.type} 
-                        values={v.values} 
-                        img={v.img} 
-                        onCardClick={onCardClickHandler}
-                        isActive={true}
-                        isSelected={v.isSelected}
+                    Object.entries(pokemons).map(([k, v]) => 
+                        <PokemonCard 
+                            className={s.card}
+                            key={k} 
+                            id={v.id} 
+                            name={v.name} 
+                            type={v.type} 
+                            values={v.values} 
+                            img={v.img} 
+                            isActive={true}
+                            isSelected={v.isSelected}
+                            onCardClick={() => {
+                                if (Object.keys(pokemonsContext.selectedPokemons).length < 5 || v.isSelected) {
+                                        onCardSelectedHandler(k);
+                                    }
+                                }                                    
+                            }
                         />)
                 }
-                </div>
-            </Layout>
+            </div>
         </>
     );
 };
 
-export default GamePage;
+export default StartPage;

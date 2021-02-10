@@ -22,11 +22,6 @@
     transform: rotateY(180deg);
 }
 
-.card {
-    max-height: 14.8vw;
-    margin-top: -6vw;
-}
-
 .pokemonCard.active {
     animation: flipFront 1000ms 300ms forwards;
 }
@@ -41,7 +36,8 @@
 }
 
 .pokemonCard.selected {
-    margin-top: -40px;
+    margin-top: -20px;
+    margin-bottom: 20px;
 }
 
 .cardFront,
@@ -64,6 +60,12 @@
     transform: rotateY(0deg);
     z-index: 2;
 }
+
+.pokemonCard:active .wrap.front::after,
+.pokemonCard:focus .wrap.front::after {
+    border-color: var(--rock);
+}
+
 
 .wrap {
     position: absolute;
