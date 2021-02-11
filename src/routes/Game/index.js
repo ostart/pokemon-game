@@ -1,98 +1,43 @@
-import { useHistory } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Layout from '../../components/Layout';
-import PokemonCard from '../../components/PokemonCard';
-import database from '../../service/firebase';
+import { useRouteMatch, Route, Switch } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
 
-import s from './style.module.css';
+import StartPage from './routes/Start';
+import BoardPage from './routes/Board';
+import FinishPage from './routes/Finish';
+
+import { PokemonContext } from '../../context/pokemonContext';
 
 const GamePage = () => {
-    const history = useHistory();
+    const match = useRouteMatch();
 
-    const onClickHandler = () => {
-        history.push('/');
-    };
+    const [selectedPokemons, setSelectedPokemons] = useState({});
 
-    const [pokemons, setPokemons] = useState({});
-
-    useEffect(() => {
-        database.ref('pokemons').once('value', (snapshot) => {
-            setPokemons(snapshot.val());
-        });
-    }, []);
-
-    const onCardClickHandler = (id) => {
-        setPokemons(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                if (pokemon.id === id) {
-                    pokemon.isActive = !pokemon.isActive;
-                    database.ref('pokemons/'+ item[0]).set(pokemon);
-                };
-        
-                acc[item[0]] = pokemon;
-        
-                return acc;
-            }, {});
-        });
-    };
-
-    const addNewPokemonHandler = () => {
-        const newId = Math.floor(Math.random() * 100);
-        const newPikachu = {
-            "abilities" : [ "static", "lightning-rod" ],
-            "base_experience" : 112,
-            "height" : 4,
-            "id" : newId,
-            "img" : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-            "name" : "pikachu",
-            "stats" : {
-              "attack" : 55,
-              "defense" : 40,
-              "hp" : 35,
-              "special-attack" : 50,
-              "special-defense" : 50,
-              "speed" : 90
-            },
-            "type" : "electric",
-            "values" : {
-              "bottom" : 9,
-              "left" : 6,
-              "right" : "A",
-              "top" : 8
+    const selectedPokemonsHandler = (key, pokemon) => {
+        setSelectedPokemons(prevState => {
+            if (prevState[key]) {
+                const copyState = {...prevState};
+                delete copyState[key];
+                
+                return copyState;
             }
-        };
-        const newPostKey = database.ref().child('pokemons').push().key;
-        database.ref('pokemons/' + newPostKey).set(newPikachu);
-        setPokemons(prevState => ({ ...prevState, [newPostKey]: newPikachu}));
+            return {
+                ...prevState,
+                [key]: pokemon,
+            }
+        })
     }
 
     return (
-        <>
-            <div>
-                This is Game Page!!!
-            </div>
-            <button onClick={onClickHandler}>
-                Return Home
-            </button>
-            <Layout id="cards" title="Cards" colorBg="#202736" colorTitle="#FEFEFE">
-                <div className={s.flex}><button onClick={addNewPokemonHandler}>ADD NEW POKEMON</button></div>
-                <div className={s.flex}>
-                {
-                    Object.entries(pokemons).map(([k, v]) => <PokemonCard 
-                        key={k} 
-                        id={v.id} 
-                        name={v.name} 
-                        type={v.type} 
-                        values={v.values} 
-                        img={v.img} 
-                        onCardClick={onCardClickHandler}
-                        isActive={v.isActive}
-                        />)
-                }
-                </div>
-            </Layout>
-        </>
+        <PokemonContext.Provider value={{
+            selectedPokemons,
+            onSelectPokemons: selectedPokemonsHandler
+        }}>
+            <Switch>
+                <Route path={`${match.path}/`} exact component={StartPage} />
+                <Route path={`${match.path}/board`} component={BoardPage} />
+                <Route path={`${match.path}/finish`} component={FinishPage} />
+            </Switch>
+        </PokemonContext.Provider>
     );
 };
 
