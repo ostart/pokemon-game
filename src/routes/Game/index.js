@@ -1,5 +1,5 @@
 import { useRouteMatch, Route, Switch } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 
 import StartPage from './routes/Start';
 import BoardPage from './routes/Board';
